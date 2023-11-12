@@ -117,13 +117,19 @@ public class InteractiveEchoClient {
 
         if (echoClient != null) {
             String[] parts = arg.split(" ");
-            if (parts.length < 2 || parts.length > 3 || !isNumeric(parts[0]) || !isNumeric(parts[1])) {
+            if (parts.length < 2 || !isNumeric(parts[0]) || !isNumeric(parts[1])) {
                 System.out.println("usage: send <repeat-count> <message-length> <message>");
                 return;
             }
             int repeatCount = toNumber(parts[0]);
             int msgLength = toNumber(parts[1]);
-            String echoMessage = parts.length == 3 ? parts[2] : "hello abcdefghijklmnopqrstuvwxyz";
+            String echoMessage;
+            if (parts.length > 2) {
+                echoMessage = arg.trim().substring(parts[0].length()).trim().substring(parts[1].length()).trim();
+            }
+            else {
+                echoMessage = "hello abcdefghijklmnopqrstuvwxyz";
+            }
             if (echoMessage.length() < msgLength) {
                 int toAdd = msgLength - echoMessage.length();
                 echoMessage += echoMessage.repeat(toAdd / echoMessage.length() + 1);
