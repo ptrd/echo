@@ -112,6 +112,46 @@ public class InteractiveEchoClient {
         }
     }
 
+    private void send(String arg) {
+        int intervalInMillis = 1500;
+
+        if (echoClient != null) {
+            String[] parts = arg.split(" ");
+            if (parts.length < 2 || parts.length > 3 || !isNumeric(parts[0]) || !isNumeric(parts[1])) {
+                System.out.println("usage: send <repeat-count> <message-length> <message>");
+                return;
+            }
+            int repeatCount = toNumber(parts[0]);
+            int msgLength = toNumber(parts[1]);
+            String echoMessage = parts.length == 3 ? parts[2] : "hello abcdefghijklmnopqrstuvwxyz";
+            if (echoMessage.length() < msgLength) {
+                int toAdd = msgLength - echoMessage.length();
+                echoMessage += echoMessage.repeat(toAdd / echoMessage.length() + 1);
+            }
+            if (echoMessage.length() > msgLength) {
+                echoMessage = echoMessage.substring(0, msgLength);
+            }
+            try {
+                do {
+                    echoClient.send(echoMessage);
+                    if (--repeatCount > 0) {
+                        try {
+                            Thread.sleep(intervalInMillis);
+                        }
+                        catch (InterruptedException e) {}
+                    }
+                }
+                while (repeatCount > 0);
+            }
+            catch (IOException e) {
+                error(e);
+            }
+        }
+        else {
+            System.out.println("not connected");
+        }
+    }
+
     private void close(String arg) {
         if (echoClient != null) {
             try {
@@ -131,6 +171,7 @@ public class InteractiveEchoClient {
         commands.put("!!", this::repeatLastCommand);
         commands.put("connect", this::connect);
         commands.put("echo", this::echo);
+        commands.put("send", this::send);
         commands.put("close", this::close);
     }
 
@@ -145,6 +186,13 @@ public class InteractiveEchoClient {
         System.out.println("available commands: " + commands.keySet().stream().collect(Collectors.joining(", ")));
     }
 
+    private boolean isNumeric(String arg) {
+        return arg.matches("\\d+");
+    }
+
+    private int toNumber(String arg) {
+        return Integer.parseInt(arg);
+    }
     private void quit(String arg) {
         System.out.println("bye");
         running = false;

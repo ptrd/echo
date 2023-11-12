@@ -26,6 +26,14 @@ public class EchoClient {
         System.out.println("Echoed: " + line);
     }
 
+    public void send(String message) throws IOException {
+        socket.getOutputStream().write((message + "\n").getBytes());
+        socket.getOutputStream().flush();
+        System.out.println("Sent: " + (
+                message.length() > 30? message.substring(0, 30) + "... (" + (message.length() - 30) + " more bytes))"
+                : message));
+    }
+
     public void close() throws IOException {
         socket.close();
     }
