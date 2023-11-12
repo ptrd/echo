@@ -86,6 +86,7 @@ public class InteractiveEchoClient {
         if (parts.length == 2) {
             String host = parts[0];
             int port = Integer.parseInt(parts[1]);
+            echoClient = null;
             try {
                 echoClient = new EchoClient(host, port);
             }
