@@ -1,0 +1,30 @@
+apply plugin: 'java'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+task echoServer(type: Jar) {
+    archiveBaseName = "echoServer"
+    manifest {
+        attributes 'Main-Class': 'net.luminis.networking.echo.server.EchoServer'
+    }
+    from(sourceSets.main.output) {
+        include "net/luminis/networking/echo/server/**"
+    }
+}
+
+task echoClient(type: Jar) {
+    archiveBaseName = "echoClient"
+    manifest {
+        attributes 'Main-Class': 'net.luminis.networking.echo.client.EchoClient'
+    }
+    from(sourceSets.main.output) {
+        include "net/luminis/networking/echo/client/**"
+    }
+}
+
+artifacts {
+    archives echoServer, echoClient
+}
