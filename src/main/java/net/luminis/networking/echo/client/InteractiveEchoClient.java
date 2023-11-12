@@ -132,16 +132,16 @@ public class InteractiveEchoClient {
                 echoMessage = echoMessage.substring(0, msgLength);
             }
             try {
-                do {
-                    echoClient.send(echoMessage);
-                    if (--repeatCount > 0) {
+                for (int i = 0; i < repeatCount; i++) {
+                    if (i > 0) {
                         try {
                             Thread.sleep(intervalInMillis);
                         }
                         catch (InterruptedException e) {}
                     }
+                    System.out.print("#" + (i+1) + " ");
+                    echoClient.send(echoMessage);
                 }
-                while (repeatCount > 0);
             }
             catch (IOException e) {
                 error(e);
