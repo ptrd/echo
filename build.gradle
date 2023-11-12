@@ -18,7 +18,7 @@ task echoServer(type: Jar) {
 task echoClient(type: Jar) {
     archiveBaseName = "echoClient"
     manifest {
-        attributes 'Main-Class': 'net.luminis.networking.echo.client.EchoClient'
+        attributes 'Main-Class': 'net.luminis.networking.echo.client.InteractiveEchoClient'
     }
     from(sourceSets.main.output) {
         include "net/luminis/networking/echo/client/**"

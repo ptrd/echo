@@ -9,32 +9,36 @@ import java.net.Socket;
 
 public class EchoClient {
 
-    public EchoClient(String host, int port) {
-        try {
-            Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(host, port));
-            System.out.println("Starting Echo client on local port " + socket.getLocalPort());
+    private final Socket socket;
 
-            socket.getOutputStream().write("Hello, world!\n".getBytes());
-            socket.getOutputStream().flush();
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String line = reader.readLine();
-            System.out.println("Echoed: " + line);
-            socket.close();
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public EchoClient(String host, int port) throws IOException {
+        socket = new Socket();
+        socket.connect(new InetSocketAddress(host, port));
+        System.out.println("Starting Echo client on local port " + socket.getLocalPort());
     }
 
-    public static void main(String[] args) {
+    public void echo(String message) throws IOException {
+        socket.getOutputStream().write((message + "\n").getBytes());
+        socket.getOutputStream().flush();
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        String line = reader.readLine();
+        System.out.println("Echoed: " + line);
+    }
+
+    public void close() throws IOException {
+        socket.close();
+    }
+
+    public static void main(String[] args) throws IOException {
         if (args.length != 2) {
             System.out.println("Usage: java EchoClient <host> <port>");
             System.exit(1);
         }
         String host = args[0];
         int port = Integer.parseInt(args[1]);
-        new EchoClient(host, port);
+        EchoClient echoClient = new EchoClient(host, port);
+        echoClient.echo("Hello, world!\n");
+        echoClient.close();
     }
 }
