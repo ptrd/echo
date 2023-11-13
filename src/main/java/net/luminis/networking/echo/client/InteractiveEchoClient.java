@@ -36,7 +36,7 @@ public class InteractiveEchoClient {
 
             running = true;
             while (running) {
-                String cmdLine = in.readLine();
+                String cmdLine = in.readLine().trim();
                 if (! cmdLine.isBlank()) {
                     String cmd = cmdLine.split(" ")[0];
                     List<String> matchingCommands = commands.keySet().stream().filter(command -> command.startsWith(cmd)).collect(Collectors.toList());
@@ -84,7 +84,7 @@ public class InteractiveEchoClient {
     }
 
     private void connect(String arg) {
-        String[] parts = arg.split(" ");
+        String[] parts = arg.trim().split("\\s+");
         if (parts.length == 2) {
             String host = parts[0];
             int port = Integer.parseInt(parts[1]);
