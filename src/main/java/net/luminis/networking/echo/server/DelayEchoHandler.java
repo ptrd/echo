@@ -11,7 +11,7 @@ public class DelayEchoHandler implements EchoHandler {
 
     @Override
     public void handle(Socket socket, String name) throws IOException {
-        System.out.println(name + " started.");
+        System.out.println(name + " started. Receive buffer size: " + socket.getReceiveBufferSize());
         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         while (true) {
             Integer delay = readNumber(reader);

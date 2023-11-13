@@ -1,5 +1,7 @@
 package net.luminis.networking.echo.server;
 
+import net.luminis.networking.echo.Version;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,7 +20,7 @@ public class EchoServer {
 
     void start() {
         new Thread(() -> {
-            System.out.println("EchoServer started on port " + port);
+            System.out.println("Started on port " + port + ": " + handler.getClass().getSimpleName());
             while (true) {
                 try {
                     Socket acceptedConnection = serverSocket.accept();
@@ -32,6 +34,7 @@ public class EchoServer {
     }
 
     public static void main(String[] args) throws IOException {
+        System.out.println("EchoServer " + Version.version() + " started.");
         new EchoServer(8080, new DefaultEchoHandler()).start();
         new EchoServer(8086, new DelayEchoHandler()).start();
         new EchoServer(8089, new NeverEchoHandler()).start();
