@@ -1,5 +1,7 @@
 package net.luminis.networking.echo.client;
 
+import net.luminis.networking.echo.Version;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -172,6 +174,10 @@ public class InteractiveEchoClient {
         }
     }
 
+    private void version(String arg) {
+        System.out.println(Version.version());
+    }
+
     private void setupCommands() {
         commands.put("help", this::help);
         commands.put("quit", this::quit);
@@ -180,6 +186,7 @@ public class InteractiveEchoClient {
         commands.put("echo", this::echo);
         commands.put("send", this::send);
         commands.put("close", this::close);
+        commands.put("version", this::version);
     }
 
     private void repeatLastCommand(String arg) {
