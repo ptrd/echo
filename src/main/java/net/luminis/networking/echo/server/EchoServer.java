@@ -33,8 +33,8 @@ public class EchoServer {
 
     public static void main(String[] args) throws IOException {
         new EchoServer(8080, new DefaultEchoHandler()).start();
-        new EchoServer(8082, new NeverEchoHandler()).start();
-        new EchoServer(8084, new DelayEchoHandler()).start();
+        new EchoServer(8086, new DelayEchoHandler()).start();
+        new EchoServer(8089, new NeverEchoHandler()).start();
     }
 
 }
