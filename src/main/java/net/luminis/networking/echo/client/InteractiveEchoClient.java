@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+
 public class InteractiveEchoClient {
 
     private Map<String, Consumer<String>> commands;
@@ -161,6 +162,45 @@ public class InteractiveEchoClient {
         }
     }
 
+    private void setReadTimeout(String arg) {
+        if (echoClient != null) {
+            try {
+                if (isNumeric(arg)) {
+                    echoClient.setSocketTimeout(Integer.parseInt(arg));
+                }
+                else {
+                    System.out.println(echoClient.getSocketTimeout());
+                }
+            }
+            catch (IOException e) {
+                error(e);
+            }
+        }
+        else {
+            System.out.println("not connected");
+        }
+    }
+
+    private void sendBufferSize(String arg) {
+        if (echoClient != null) {
+            try {
+                if (isNumeric(arg)) {
+                    echoClient.setSendBufferSize(Integer.parseInt(arg));
+                    System.out.println("actual send buffer size: " + echoClient.getSendBufferSize());
+                }
+                else {
+                    System.out.println("current send buffer size: " + echoClient.getSendBufferSize());
+                }
+            }
+            catch (IOException e) {
+                error(e);
+            }
+        }
+        else {
+            System.out.println("not connected");
+        }
+    }
+
     private void close(String arg) {
         if (echoClient != null) {
             try {
@@ -185,7 +225,9 @@ public class InteractiveEchoClient {
         commands.put("connect", this::connect);
         commands.put("echo", this::echo);
         commands.put("send", this::send);
+        commands.put("timeout", this::setReadTimeout);
         commands.put("close", this::close);
+        commands.put("buffer", this::sendBufferSize);
         commands.put("version", this::version);
     }
 

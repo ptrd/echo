@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class EchoClient {
 
@@ -38,6 +39,15 @@ public class EchoClient {
         socket.close();
     }
 
+    public void setSocketTimeout(int timeoutInSeconds) throws IOException {
+        socket.setSoTimeout(timeoutInSeconds * 1000);
+    }
+
+
+    public int getSocketTimeout() throws SocketException {
+        return socket.getSoTimeout();
+    }
+
     public static void main(String[] args) throws IOException {
         if (args.length != 2) {
             System.out.println("Usage: java EchoClient <host> <port>");
@@ -48,5 +58,14 @@ public class EchoClient {
         EchoClient echoClient = new EchoClient(host, port);
         echoClient.echo("Hello, world!\n");
         echoClient.close();
+    }
+
+    public long getSendBufferSize() throws SocketException {
+        return socket.getSendBufferSize();
+    }
+
+    public int setSendBufferSize(int size) throws SocketException {
+        socket.setSendBufferSize(size);
+        return socket.getSendBufferSize();
     }
 }
