@@ -1,8 +1,9 @@
 package net.luminis.networking.echo.server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PushbackReader;
+import java.io.Reader;
 import java.net.Socket;
 
 public class DelayEchoHandler implements EchoHandler {
@@ -12,7 +13,7 @@ public class DelayEchoHandler implements EchoHandler {
     @Override
     public void handle(Socket socket, String name) throws IOException {
         System.out.println(name + " started. Receive buffer size: " + socket.getReceiveBufferSize());
-        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        PushbackReader reader = new PushbackReader(new InputStreamReader(socket.getInputStream()));
         while (true) {
             Integer delay = readNumber(reader);
             if (delay == null) {
@@ -25,7 +26,7 @@ public class DelayEchoHandler implements EchoHandler {
                 System.out.println(name + " Interrupted");
             }
 
-            String line = reader.readLine();
+            String line = readLine(reader);
             if (line != null) {
                 socket.getOutputStream().write((line + "\n").getBytes());
                 socket.getOutputStream().flush();
@@ -39,13 +40,16 @@ public class DelayEchoHandler implements EchoHandler {
 
     }
 
-    private Integer readNumber(BufferedReader reader) throws IOException {
+    private Integer readNumber(PushbackReader reader) throws IOException {
         String read = "";
         int character;
         do {
             character = reader.read();
             if (isNumeric(character)) {
                 read += (char) character;
+            }
+            else {
+                reader.unread(character);
             }
         }
         while (isNumeric(character) && read.length() < 3);
@@ -54,6 +58,25 @@ public class DelayEchoHandler implements EchoHandler {
             return null;
         else
             return Integer.parseInt(read);
+    }
+
+    private String readLine(Reader input) {
+        try {
+            StringBuilder line = new StringBuilder();
+            int character;
+            while ((character = input.read()) != -1) {
+                if (character == '\n') {
+                    return line.toString();
+                }
+                else {
+                    line.append((char) character);
+                }
+            }
+            return line.toString();
+        }
+        catch (IOException e) {
+            return null;
+        }
     }
 
     private boolean isNumeric(int character) {
