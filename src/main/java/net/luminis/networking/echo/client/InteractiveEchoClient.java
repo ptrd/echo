@@ -122,7 +122,7 @@ public class InteractiveEchoClient {
         if (echoClient != null) {
             String[] parts = arg.split(" ");
             if (parts.length < 2 || !isNumeric(parts[0]) || !isNumeric(parts[1])) {
-                System.out.println("usage: send <repeat-count> <message-length> <message>");
+                System.out.println("usage: send <repeat-count> <message-length> [<message>]");
                 return;
             }
             int repeatCount = toNumber(parts[0]);
