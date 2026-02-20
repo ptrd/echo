@@ -37,7 +37,12 @@ public class InteractiveEchoClient {
 
             running = true;
             while (running) {
-                String cmdLine = in.readLine().trim();
+                String nextLine = in.readLine();
+                if (nextLine == null) {
+                    System.out.println("bye");
+                    break;
+                }
+                String cmdLine = nextLine.trim();
                 if (! cmdLine.isBlank()) {
                     String cmd = cmdLine.split(" ")[0];
                     List<String> matchingCommands = commands.keySet().stream().filter(command -> command.startsWith(cmd)).collect(Collectors.toList());
