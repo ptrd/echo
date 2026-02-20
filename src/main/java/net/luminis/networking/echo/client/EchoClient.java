@@ -24,7 +24,12 @@ public class EchoClient {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String line = reader.readLine();
-        System.out.println("Echoed: " + line);
+        if (line != null) {
+            System.out.println("Echoed: " + line);
+        }
+        else {
+            System.out.println("No response: end of stream reached");
+        }
     }
 
     public void send(String message) throws IOException {
