@@ -36,6 +36,7 @@ public class EchoServer {
     public static void main(String[] args) throws IOException {
         System.out.println("EchoServer " + Version.version() + " started.");
         new EchoServer(8080, new DefaultEchoHandler()).start();
+        new EchoServer(8083, new SurpriseHandler()).start();
         new EchoServer(8086, new FixedDelayHandler()).start();
         new EchoServer(8088, new DelayEchoHandler()).start();
         new EchoServer(8089, new NeverEchoHandler()).start();
