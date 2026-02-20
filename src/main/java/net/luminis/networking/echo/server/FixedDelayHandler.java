@@ -19,6 +19,10 @@ public class FixedDelayHandler implements EchoHandler {
         while (true) {
             socket.setSoTimeout(0);
             line = reader.readLine();
+            if (line == null) {
+                break;
+            }
+
             int delay = DEFAULT_DELAY;
             System.out.println(name + ": delay = " + delay + " seconds");
             try {
@@ -46,7 +50,5 @@ public class FixedDelayHandler implements EchoHandler {
                 // Apparently, read all the data the client had sent, so start a new delay loop.
             }
         }
-
     }
-
 }
