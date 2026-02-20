@@ -18,6 +18,7 @@ public class InteractiveEchoClient {
     private volatile boolean running;
     private Map<String, String> history;
     private EchoClient echoClient;
+    private String serverAddress;
 
     public static void main(String[] args) {
         new InteractiveEchoClient().commandLoop();
@@ -94,19 +95,30 @@ public class InteractiveEchoClient {
 
     private void connect(String arg) {
         String[] parts = arg.trim().split("\\s+");
+        String host;
+        int port;
         if (parts.length == 2) {
-            String host = parts[0];
-            int port = Integer.parseInt(parts[1]);
-            echoClient = null;
-            try {
-                echoClient = new EchoClient(host, port);
+            host = parts[0];
+            port = Integer.parseInt(parts[1]);
+        }
+        else if (parts.length == 1 && isNumeric(parts[0])) {
+            if (serverAddress == null) {
+                error("no server address set; use 'server <ip-address>' first, or specify both host and port");
+                return;
             }
-            catch (IOException e) {
-                error(e);
-            }
+            host = serverAddress;
+            port = Integer.parseInt(parts[0]);
         }
         else {
-            error("usage: connect <host> <port>");
+            error("usage: connect [<host>] <port>");
+            return;
+        }
+        echoClient = null;
+        try {
+            echoClient = new EchoClient(host, port);
+        }
+        catch (IOException e) {
+            error(e);
         }
     }
 
@@ -226,10 +238,24 @@ public class InteractiveEchoClient {
         System.out.println(Version.version());
     }
 
+    private void server(String arg) {
+        if (arg.isBlank()) {
+            if (serverAddress != null) {
+                System.out.println("server address: " + serverAddress);
+            } else {
+                System.out.println("no server address set");
+            }
+        } else {
+            serverAddress = arg.trim();
+            System.out.println("server address set to " + serverAddress);
+        }
+    }
+
     private void setupCommands() {
         commands.put("help", this::help);
         commands.put("quit", this::quit);
         commands.put("!!", this::repeatLastCommand);
+        commands.put("server", this::server);
         commands.put("connect", this::connect);
         commands.put("echo", this::echo);
         commands.put("send", this::send);
