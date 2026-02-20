@@ -58,6 +58,9 @@ public class InteractiveEchoClient {
                         } catch (Exception error) {
                             error(error);
                         }
+                    } else if (matchingCommands.size() > 1) {
+                        System.out.println("ambiguous command, did you mean " +
+                                matchingCommands.stream().map(s -> "\"" + s + "\"").collect(Collectors.joining(" or ")) + "?");
                     } else {
                         unknown(cmd);
                     }
