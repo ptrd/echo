@@ -29,6 +29,8 @@ public class SurpriseHandler implements EchoHandler {
                     }
                     catch (InterruptedException ignored) {}
 
+                    Logger.logAction(name, "not echoing", line);
+
                     String word = SURPRISE_WORDS[random.nextInt(SURPRISE_WORDS.length)];
                     out.write((word + "\n").getBytes());
                     out.flush();

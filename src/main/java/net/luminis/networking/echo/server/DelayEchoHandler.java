@@ -19,7 +19,7 @@ public class DelayEchoHandler implements EchoHandler {
             if (delay == null) {
                 delay = DEFAULT_DELAY;
             }
-            System.out.println(name + ": delay = " + delay + " seconds");
+            System.out.println(name + " delay = " + delay + " seconds");
             try {
                 Thread.sleep(delay * 1000);
             } catch (InterruptedException e) {
@@ -30,7 +30,7 @@ public class DelayEchoHandler implements EchoHandler {
             if (line != null) {
                 socket.getOutputStream().write((line + "\n").getBytes());
                 socket.getOutputStream().flush();
-                System.out.println(name + " echoed: " + line.length() + " bytes");
+                Logger.logEcho(name, line);
             }
             else {
                 System.out.println(name + " terminated because client closed connection");

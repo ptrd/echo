@@ -36,7 +36,7 @@ public class FixedDelayHandler implements EchoHandler {
                 do {
                     socket.getOutputStream().write((line + "\n").getBytes());
                     socket.getOutputStream().flush();
-                    System.out.println(name + " echoed: " + line.length() + " bytes");
+                    Logger.logEcho(name, line);
                     line = reader.readLine();
                 }
                 while (line != null);

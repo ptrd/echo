@@ -15,7 +15,7 @@ public class DefaultEchoHandler implements EchoHandler {
             if (line != null) {
                 socket.getOutputStream().write((line + "\n").getBytes());
                 socket.getOutputStream().flush();
-                System.out.println(name + " echoed: " + line.length() + " bytes");
+                Logger.logEcho(name, line);
             }
             else {
                 System.out.println(name + " terminated because client closed connection");

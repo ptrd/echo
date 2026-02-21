@@ -14,7 +14,7 @@ public class EchoClientConnection {
     }
 
     public void start() {
-        String name = "EchoClientConnection-" + handler.getClass().getSimpleName() + "-" + socket.getRemoteSocketAddress();
+        String name = handler.getClass().getSimpleName() + "[" + socket.getRemoteSocketAddress() + "]";
         new Thread(() -> {
             try {
                 System.out.println(name + " started");
